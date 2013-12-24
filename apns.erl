@@ -36,9 +36,9 @@ send_pn(Msg) ->
   case ssl:connect(Address, Port, Options, Timeout) of
     {ok, Socket} ->
 
-	  % Convert the device token from hex to int to binary
-	  Token = "195ec05a962b24954693c0b638b6216579a0d1d74b3e1c6f534c6f8fd0d50d03",
-	  TokenNum = erlang:list_to_integer(Token, 16),
+	    % Convert the device token from hex to int to binary
+	    Token = "195ec05a962b24954693c0b638b6216579a0d1d74b3e1c6f534c6f8fd0d50d03",
+	    TokenNum = erlang:list_to_integer(Token, 16),
       TokenBin = <<TokenNum:32/integer-unit:8>>,
 
       % Construct the protocol packet
