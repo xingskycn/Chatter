@@ -14,6 +14,8 @@
 
 @implementation ViewController
 
+@synthesize messageBox;
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];

@@ -1,0 +1,25 @@
+So far I managed to use the package manager brew to install ejabberd from source
+
+Look in /usr/local/etc/ejabberd for the config file
+Look in /usr/local/sbin for the ejabberdctl script
+
+To add the first user
+
+1) /usr/local/sbin/ejabberdctl start
+
+2) /usr/local/sbin/ejabberdctl register admin localhost password
+
+3) Add this at the bottom of /usr/local/etc/ejabberd.cfg to give the user admin rights:
+
+{acl, admin, {user, "admin", "localhost"}}.
+{access, configure, [{allow, admin}]}.
+
+4) Do additional configuration through localhost:5280/admin in a web browser
+login: admin
+password: password
+
+Next steps:
+----------------------
+1) Try running one of the source modules in the erlang interpreter
+2) Write a module for apple push
+3) re compile the module for localhost
