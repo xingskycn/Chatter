@@ -28,22 +28,22 @@ send_pn(Msg) ->
   Address = "gateway.sandbox.push.apple.com",
   %Address = "gateway.push.apple.com",
   Port = 2195,
-  Cert = "../certificates/apns-cert.pem",
-  Key  = "../certificates/apns-key.pem",
-  Options = [{certfile, Cert}, {keyfile, Key}, {mode, binary}, {verify, verify_none}],
-  Timeout = 1000,
+  Cert = "/Users/joemartin/Desktop/PushNotificationCertificates/PushChatCert.pem",
+  Key  = "/Users/joemartin/Desktop/PushNotificationCertificates/PushChatKey.pem",
+  Options = [{certfile, Cert}, {keyfile, Key}, {password, "bomber100"}, {mode, binary}, {verify, verify_none}],
+  Timeout = 5000,
 
   case ssl:connect(Address, Port, Options, Timeout) of
     {ok, Socket} ->
 
-	    % Convert the device token from hex to int to binary
-	    Token = "195ec05a962b24954693c0b638b6216579a0d1d74b3e1c6f534c6f8fd0d50d03",
-	    TokenNum = erlang:list_to_integer(Token, 16),
+      % Convert the device token from hex to int to binary
+      Token = "3eca19d72fff06a1ac349a4821d1178c3e0a38aea54631efe07f05b6bea10cec",
+      TokenNum = erlang:list_to_integer(Token, 16),
       TokenBin = <<TokenNum:32/integer-unit:8>>,
 
       % Construct the protocol packet
       PayloadString = create_json(Msg),
-      Payload = <<PayloadString>>,
+      Payload = list_to_binary(PayloadString),
       PayloadLength = byte_size(Payload),
       Packet = <<0:8, 32:16, TokenBin/binary, PayloadLength:16, Payload/binary>>,
 
