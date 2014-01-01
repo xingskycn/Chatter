@@ -20,18 +20,17 @@ send(Msg, Badge, Sound) ->
 
 send_pn(Msg) ->
 
-  % start ssl (which requires crypto to also be started)
-  crypto:start(),
+  % start ssl
   ssl:start(),
 
   % socket configuration, may need to increase the timeout if concurrency becomes an issue
   Address = "gateway.sandbox.push.apple.com",
-  %Address = "gateway.push.apple.com",
+  % Address = "gateway.push.apple.com",
   Port = 2195,
   Cert = "/Users/joemartin/Desktop/PushNotificationCertificates/PushChatCert.pem",
   Key  = "/Users/joemartin/Desktop/PushNotificationCertificates/PushChatKey.pem",
   Options = [{certfile, Cert}, {keyfile, Key}, {password, "bomber100"}, {mode, binary}, {verify, verify_none}],
-  Timeout = 5000,
+  Timeout = 10000,
 
   case ssl:connect(Address, Port, Options, Timeout) of
     {ok, Socket} ->
