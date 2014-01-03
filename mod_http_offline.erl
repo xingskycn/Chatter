@@ -38,7 +38,7 @@ create_message(_From, _To, Packet) ->
         ToS = xml:get_tag_attr_s("to", Packet),
         Body = xml:get_path_s(Packet, [{elem, "body"}, cdata]),
         if (Type == "chat") ->
-            send("You did it, go jerk off!","10","Chime")
+            send(Body,"10","Chime")
         end.
   
 % All argument fields expect a string
