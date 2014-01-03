@@ -10,4 +10,12 @@
 
 @interface SettingViewController : UIViewController
 
+extern NSString *const kXMPPmyJID;
+extern NSString *const kXMPPmyPassword;
+
+@property (weak, nonatomic) IBOutlet UITextField *username;
+@property (weak, nonatomic) IBOutlet UITextField *password;
+
+- (IBAction)submit:(id)sender;
+
 @end

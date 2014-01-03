@@ -11,8 +11,6 @@
 @interface ViewController : UIViewController
 
 - (IBAction)loginView:(id)sender;
-
 - (IBAction)buddyListView:(id)sender;
-
 
 @end

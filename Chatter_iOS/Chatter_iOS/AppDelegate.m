@@ -7,6 +7,7 @@
 //
 
 #import "AppDelegate.h"
+#import "SettingViewController.h"
 
 
 @interface AppDelegate()
@@ -231,15 +232,15 @@
 		return YES;
 	}
     
-	//NSString *myJID = [[NSUserDefaults standardUserDefaults] stringForKey:kXMPPmyJID];
-	//NSString *myPassword = [[NSUserDefaults standardUserDefaults] stringForKey:kXMPPmyPassword];
+	NSString *myJID = [[NSUserDefaults standardUserDefaults] stringForKey:kXMPPmyJID];
+	NSString *myPassword = [[NSUserDefaults standardUserDefaults] stringForKey:kXMPPmyPassword];
     
 	//
 	// If you don't want to use the Settings view to set the JID,
 	// uncomment the section below to hard code a JID and password.
 	//
-	NSString *myJID = @"joe@localhost";
-	NSString *myPassword = @"mypassword";
+	//NSString *myJID = @"joe@localhost";
+	//NSString *myPassword = @"mypassword";
 	
 	if (myJID == nil || myPassword == nil) {
 		return NO;

@@ -7,7 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <CoreData/CoreData.h>
 
-@interface BuddyListViewController : UIViewController
+
+@interface BuddyListViewController : UITableViewController <NSFetchedResultsControllerDelegate> {
+    
+    // This needed to be within the interface, as it somehow affects visibility to other controllers
+    NSFetchedResultsController *fetchedResultsController;
+}
 
 @end
