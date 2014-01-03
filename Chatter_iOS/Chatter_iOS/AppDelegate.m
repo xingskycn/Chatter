@@ -163,7 +163,7 @@
 	//
 	// If you don't specify a hostPort, then the default (5222) will be used.
 	
-	[xmppStream setHostName:@"ec2-50-19-34-201.compute-1.amazonaws.com"];
+	[xmppStream setHostName:@"localhost"];
 	[xmppStream setHostPort:5222];
 	
     
@@ -238,8 +238,8 @@
 	// If you don't want to use the Settings view to set the JID,
 	// uncomment the section below to hard code a JID and password.
 	//
-	NSString *myJID = @"joe@bathtime.chat";
-	NSString *myPassword = @"bomber100";
+	NSString *myJID = @"joe@localhost";
+	NSString *myPassword = @"mypassword";
 	
 	if (myJID == nil || myPassword == nil) {
 		return NO;
@@ -301,10 +301,6 @@
 #pragma mark XMPPStream Delegate
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-- (void)xmppStream:(XMPPStream *)sender socketDidConnect:(GCDAsyncSocket *)socket
-{
-
-}
 
 - (void)xmppStream:(XMPPStream *)sender willSecureWithSettings:(NSMutableDictionary *)settings
 {

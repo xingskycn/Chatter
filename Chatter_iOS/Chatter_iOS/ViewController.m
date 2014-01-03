@@ -14,7 +14,15 @@
 
 @implementation ViewController
 
-@synthesize messageBox;
+- (IBAction)loginView:(id)sender {
+    //transition to the view containing the login screen
+    [self performSegueWithIdentifier:@"settings" sender:self];
+}
+
+- (IBAction)buddyListView:(id)sender {
+    //transition to the view containing the buddy list
+    [self performSegueWithIdentifier:@"buddy" sender:self];
+}
 
 - (void)viewDidLoad
 {
