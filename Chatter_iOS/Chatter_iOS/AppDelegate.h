@@ -22,8 +22,9 @@
 	XMPPvCardAvatarModule *xmppvCardAvatarModule;
 	XMPPCapabilities *xmppCapabilities;
 	XMPPCapabilitiesCoreDataStorage *xmppCapabilitiesStorage;
-	
-	NSString *password;
+    
+    //Joe added this one
+    XMPPPresence *tempPresence;
 	
 	BOOL allowSelfSignedCertificates;
 	BOOL allowSSLHostNameMismatch;

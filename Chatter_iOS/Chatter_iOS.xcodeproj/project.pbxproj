@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		7501FBE018764036004B17BD /* SettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7501FBDF18764036004B17BD /* SettingViewController.m */; };
 		7501FBE318764509004B17BD /* BuddyListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7501FBE218764509004B17BD /* BuddyListViewController.m */; };
+		7501FBE618776798004B17BD /* ChatBoxViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7501FBE518776798004B17BD /* ChatBoxViewController.m */; };
+		7501FBE91878B1F1004B17BD /* AddBuddyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7501FBE81878B1F1004B17BD /* AddBuddyViewController.m */; };
 		75061D78181B196900AB7FCD /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 75061D77181B196900AB7FCD /* CFNetwork.framework */; };
 		75061D7A181B197A00AB7FCD /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 75061D79181B197A00AB7FCD /* Security.framework */; };
 		75061DCF181B1A6B00AB7FCD /* libresolv.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 75061DCE181B1A6B00AB7FCD /* libresolv.dylib */; };
@@ -172,6 +174,10 @@
 		7501FBDF18764036004B17BD /* SettingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingViewController.m; sourceTree = "<group>"; };
 		7501FBE118764509004B17BD /* BuddyListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BuddyListViewController.h; sourceTree = "<group>"; };
 		7501FBE218764509004B17BD /* BuddyListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BuddyListViewController.m; sourceTree = "<group>"; };
+		7501FBE418776798004B17BD /* ChatBoxViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatBoxViewController.h; sourceTree = "<group>"; };
+		7501FBE518776798004B17BD /* ChatBoxViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatBoxViewController.m; sourceTree = "<group>"; };
+		7501FBE71878B1F1004B17BD /* AddBuddyViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddBuddyViewController.h; sourceTree = "<group>"; };
+		7501FBE81878B1F1004B17BD /* AddBuddyViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddBuddyViewController.m; sourceTree = "<group>"; };
 		75061D77181B196900AB7FCD /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		75061D79181B197A00AB7FCD /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		75061DCE181B1A6B00AB7FCD /* libresolv.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libresolv.dylib; path = usr/lib/libresolv.dylib; sourceTree = SDKROOT; };
@@ -1286,11 +1292,15 @@
 				754947E41819FC130038E27D /* Main_iPhone.storyboard */,
 				7501FBDE18764036004B17BD /* SettingViewController.h */,
 				7501FBDF18764036004B17BD /* SettingViewController.m */,
+				7501FBE71878B1F1004B17BD /* AddBuddyViewController.h */,
+				7501FBE81878B1F1004B17BD /* AddBuddyViewController.m */,
 				754947E71819FC130038E27D /* Main_iPad.storyboard */,
 				754947EA1819FC130038E27D /* ViewController.h */,
 				754947EB1819FC130038E27D /* ViewController.m */,
 				7501FBE118764509004B17BD /* BuddyListViewController.h */,
 				7501FBE218764509004B17BD /* BuddyListViewController.m */,
+				7501FBE418776798004B17BD /* ChatBoxViewController.h */,
+				7501FBE518776798004B17BD /* ChatBoxViewController.m */,
 				7506214F181B6A8B00AB7FCD /* XMPPFramework.h */,
 				754947ED1819FC130038E27D /* Images.xcassets */,
 				75061F91181B6A4300AB7FCD /* XMPP */,
@@ -1543,10 +1553,12 @@
 				7506212B181B6A5300AB7FCD /* XMPPMessageArchiving_Contact_CoreDataObject.m in Sources */,
 				750620F1181B6A5300AB7FCD /* XMPPUserCoreDataStorageObject.m in Sources */,
 				75062102181B6A5300AB7FCD /* XMPPRoomHybridStorage.m in Sources */,
+				7501FBE91878B1F1004B17BD /* AddBuddyViewController.m in Sources */,
 				750620FF181B6A5300AB7FCD /* XMPPRoomMessageCoreDataStorageObject.m in Sources */,
 				75062121181B6A5300AB7FCD /* XMPPMessage+XEP_0085.m in Sources */,
 				7506210E181B6A5300AB7FCD /* XMPPvCardCoreDataStorageObject.m in Sources */,
 				750620E7181B6A5300AB7FCD /* XMPPStringPrep.m in Sources */,
+				7501FBE618776798004B17BD /* ChatBoxViewController.m in Sources */,
 				7501FBE318764509004B17BD /* BuddyListViewController.m in Sources */,
 				750620EE181B6A5300AB7FCD /* XMPPResourceCoreDataStorageObject.m in Sources */,
 				75062103181B6A5300AB7FCD /* XMPPRoomMessageHybridCoreDataStorageObject.m in Sources */,

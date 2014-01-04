@@ -9,13 +9,15 @@
 #import <UIKit/UIKit.h>
 
 @interface SettingViewController : UIViewController
-
-extern NSString *const kXMPPmyJID;
-extern NSString *const kXMPPmyPassword;
+{
+    BOOL isRegistering;
+    BOOL isAuthenticating;
+    
+}
 
 @property (weak, nonatomic) IBOutlet UITextField *username;
 @property (weak, nonatomic) IBOutlet UITextField *password;
-
+- (IBAction)registerUser:(id)sender;
 - (IBAction)submit:(id)sender;
 
 @end

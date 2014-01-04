@@ -7,6 +7,7 @@
 //
 
 #import "BuddyListViewController.h"
+#import "ChatBoxViewController.h"
 #import "XMPPFramework.h"
 #import "AppDelegate.h"
 #import "DDLog.h"
@@ -24,6 +25,7 @@ static const int ddLogLevel = LOG_LEVEL_INFO;
 {
 	return (AppDelegate *)[[UIApplication sharedApplication] delegate];
 }
+
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -160,18 +162,17 @@ static const int ddLogLevel = LOG_LEVEL_INFO;
 	return cell;
 }
 
-// TABLE CELL CLICKED
+//-----------------------------TABLE CELL CLICKED-------------------------------------
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath;
 {
     //Store the table row that was clicked
     UITableViewCell *cell = [[self tableView] cellForRowAtIndexPath:indexPath];
     
-    //Notice, this view is not changed using a segue.  It appears this inherits the navigation controller
-    //implicitly
-    /*ChatboxViewController *chatboxController = [self.storyboard instantiateViewControllerWithIdentifier:@"chatbox"];
+    //Notice, this view is not changed using a segue.  It appears this inherits the navigation controller implicitly
+    ChatboxViewController *chatboxController = [self.storyboard instantiateViewControllerWithIdentifier:@"chatbox"];
     chatboxController.messageReceiver = cell.textLabel.text;
     [self.navigationController pushViewController:chatboxController animated: YES];
-     */
+
 }
 
 
@@ -181,4 +182,7 @@ static const int ddLogLevel = LOG_LEVEL_INFO;
     // Dispose of any resources that can be recreated.
 }
 
+- (IBAction)addBuddy:(id)sender {
+    [self performSegueWithIdentifier:@"addBuddy" sender:self];
+}
 @end

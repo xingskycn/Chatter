@@ -15,5 +15,6 @@
     // This needed to be within the interface, as it somehow affects visibility to other controllers
     NSFetchedResultsController *fetchedResultsController;
 }
+- (IBAction)addBuddy:(id)sender;
 
 @end

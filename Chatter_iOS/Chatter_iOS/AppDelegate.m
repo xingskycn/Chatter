@@ -8,7 +8,11 @@
 
 #import "AppDelegate.h"
 #import "SettingViewController.h"
+#import "DDLog.h"
+#import "DDTTYLogger.h"
 
+// Log levels: off, error, warn, info, verbose
+static const int ddLogLevel = LOG_LEVEL_INFO;
 
 @interface AppDelegate()
 
@@ -36,6 +40,8 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    //start the logger
+    [DDLog addLogger:[DDTTYLogger sharedInstance]];
     
     // Setup the XMPP stream
     
@@ -51,6 +57,14 @@
 	}
     
 	return YES;
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if(alertView.tag == 1)
+    {
+        [xmppRoster subscribePresenceToUser:[tempPresence from]];
+    }
 }
 
 - (void)dealloc
@@ -226,14 +240,15 @@
 #pragma mark Connect/disconnect
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+
 - (BOOL)connect
 {
 	if (![xmppStream isDisconnected]) {
 		return YES;
 	}
     
-	NSString *myJID = [[NSUserDefaults standardUserDefaults] stringForKey:kXMPPmyJID];
-	NSString *myPassword = [[NSUserDefaults standardUserDefaults] stringForKey:kXMPPmyPassword];
+	NSString *myJID = [[NSUserDefaults standardUserDefaults] stringForKey:@"Account.JID"];
+	NSString *myPassword = [[NSUserDefaults standardUserDefaults] stringForKey:@"Account.password"];
     
 	//
 	// If you don't want to use the Settings view to set the JID,
@@ -247,8 +262,7 @@
 	}
     
 	[xmppStream setMyJID:[XMPPJID jidWithString:myJID]];
-	password = myPassword;
-    
+
 	NSError *error = nil;
 	if (![xmppStream connectWithTimeout:XMPPStreamTimeoutNone error:&error])
 	{
@@ -358,26 +372,32 @@
 {
 
 }
-
+/*
 - (void)xmppStreamDidConnect:(XMPPStream *)sender
 {
 	
+    DDLogInfo(@"Stream Connection succeeded!");
+    
 	isXmppConnected = YES;
 	
 	NSError *error = nil;
+    
+    NSString *myPassword = [[NSUserDefaults standardUserDefaults] stringForKey:@"Account.password"];
 	
-	if (![[self xmppStream] authenticateWithPassword:password error:&error])
+	if (![[self xmppStream] authenticateWithPassword:myPassword error:&error])
 	{
-        
+        //Log the failure here please
 	}
 }
+*/
 
+/*
 - (void)xmppStreamDidAuthenticate:(XMPPStream *)sender
 {
 	
 	[self goOnline];
 }
-
+*/
 - (void)xmppStream:(XMPPStream *)sender didNotAuthenticate:(NSXMLElement *)error
 {
 
@@ -428,7 +448,20 @@
 
 - (void)xmppStream:(XMPPStream *)sender didReceivePresence:(XMPPPresence *)presence
 {
+    NSString *presenceType = [presence type]; // online/offline
+    NSString *presenceFromUser = [[presence from] user];
+    
+    if  ([presenceType isEqualToString:@"subscribe"]) {
+        
+        NSLog(@"presence user wants to subscribe %@",presenceFromUser);
 
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"New request From:" message:presenceFromUser delegate:self cancelButtonTitle:@"NO" otherButtonTitles:@"YES", nil];
+        tempPresence = [[XMPPPresence alloc] init];
+        tempPresence = presence;
+        [alert setTag:1];
+        [alert show];
+        
+    }
 }
 
 - (void)xmppStream:(XMPPStream *)sender didReceiveError:(id)error
@@ -450,6 +483,7 @@
 - (void)xmppRoster:(XMPPRoster *)sender didReceiveBuddyRequest:(XMPPPresence *)presence
 {
 
+    DDLogInfo(@"A REQUEST WAS RECEIVED");
 	
 	XMPPUserCoreDataStorageObject *user = [xmppRosterStorage userForJID:[presence from]
 	                                                         xmppStream:xmppStream
@@ -488,6 +522,31 @@
 		[[UIApplication sharedApplication] presentLocalNotificationNow:localNotification];
 	}
 	
+}
+
+//-----------------------USER REGISTRATION--------------------------------------
+- (void)xmppStreamDidRegister:(XMPPStream *)sender{
+    
+    
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Registration" message:@"Registration Successful!" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+    [alert show];
+}
+
+
+- (void)xmppStream:(XMPPStream *)sender didNotRegister:(NSXMLElement *)error{
+    
+    DDXMLElement *errorXML = [error elementForName:@"error"];
+    NSString *errorCode  = [[errorXML attributeForName:@"code"] stringValue];
+    
+    NSString *regError = [NSString stringWithFormat:@"ERROR :- %@",error.description];
+    
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Registration Failed!" message:regError delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+    
+    if([errorCode isEqualToString:@"409"]){
+        
+        [alert setMessage:@"Username Already Exists!"];
+    }   
+    [alert show];
 }
 
 @end
