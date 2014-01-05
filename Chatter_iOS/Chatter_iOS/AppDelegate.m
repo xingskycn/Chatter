@@ -63,7 +63,7 @@ static const int ddLogLevel = LOG_LEVEL_INFO;
 {
     if(alertView.tag == 1)
     {
-        [xmppRoster subscribePresenceToUser:[tempPresence from]];
+        [xmppRoster acceptPresenceSubscriptionRequestFrom:[tempPresence from] andAddToRoster:YES];
     }
 }
 
