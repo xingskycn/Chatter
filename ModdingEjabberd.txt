@@ -21,6 +21,9 @@ sudo emacs /etc/ejabberd/ejabberd.cfg
 
 around line 587 add the following to enable the push module
 
+MODULE LOCATON: /lib/ejabberd/ebin
+LOG LOCATION: /var/log/ejabberd/ejabberd.log
+
 {mod_http_offline, []}
 
 {acl, admin, {user, "admin", "localhost"}}.

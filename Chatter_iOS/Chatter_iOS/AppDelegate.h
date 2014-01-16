@@ -47,8 +47,6 @@
 - (NSManagedObjectContext *)managedObjectContext_roster;
 - (NSManagedObjectContext *)managedObjectContext_capabilities;
 
-- (BOOL)connect;
-- (void)disconnect;
 
 @end
 

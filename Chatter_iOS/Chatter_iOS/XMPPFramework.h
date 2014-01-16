@@ -11,6 +11,7 @@
 #import "XMPPRosterCoreDataStorage.h"
 
 #import "XMPPvCardTempModule.h"
+#import "XMPPvCardTemp.h"
 #import "XMPPvCardAvatarModule.h"
 #import "XMPPvCardCoreDataStorage.h"
 

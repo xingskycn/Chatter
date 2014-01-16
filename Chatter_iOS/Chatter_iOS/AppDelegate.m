@@ -19,8 +19,6 @@ static const int ddLogLevel = LOG_LEVEL_INFO;
 - (void)setupStream;
 - (void)teardownStream;
 
-- (void)goOnline;
-- (void)goOffline;
 
 @end
 
@@ -46,15 +44,11 @@ static const int ddLogLevel = LOG_LEVEL_INFO;
     // Setup the XMPP stream
     
 	[self setupStream];
-    
-	if (![self connect])
-	{
-		dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, 0.0 * NSEC_PER_SEC);
-		dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-			
-			///[navigationController presentViewController:settingsViewController animated:YES completion:NULL];
-		});
-	}
+
+    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, 0.0 * NSEC_PER_SEC);
+    dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+        //[navigationController presentViewController:settingsViewController animated:YES completion:NULL];
+    });
     
 	return YES;
 }
@@ -166,6 +160,7 @@ static const int ddLogLevel = LOG_LEVEL_INFO;
     
 	[xmppStream addDelegate:self delegateQueue:dispatch_get_main_queue()];
 	[xmppRoster addDelegate:self delegateQueue:dispatch_get_main_queue()];
+    [xmppvCardTempModule addDelegate:self delegateQueue:dispatch_get_main_queue()];
     
 	// Optional:
 	//
@@ -179,6 +174,7 @@ static const int ddLogLevel = LOG_LEVEL_INFO;
 	// If you don't specify a hostPort, then the default (5222) will be used.
 	
 	[xmppStream setHostName:@"localhost"];
+//    [xmppStream setHostName:@"ec2-54-205-249-138.compute-1.amazonaws.com"];
 	[xmppStream setHostPort:5222];
 	
     
@@ -222,69 +218,9 @@ static const int ddLogLevel = LOG_LEVEL_INFO;
 // For more information on working with XML elements, see the Wiki article:
 // http://code.google.com/p/xmppframework/wiki/WorkingWithElements
 
-- (void)goOnline
-{
-	XMPPPresence *presence = [XMPPPresence presence]; // type="available" is implicit
-	
-	[[self xmppStream] sendElement:presence];
-}
-
-- (void)goOffline
-{
-	XMPPPresence *presence = [XMPPPresence presenceWithType:@"unavailable"];
-	
-	[[self xmppStream] sendElement:presence];
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-#pragma mark Connect/disconnect
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-- (BOOL)connect
-{
-	if (![xmppStream isDisconnected]) {
-		return YES;
-	}
-    
-	NSString *myJID = [[NSUserDefaults standardUserDefaults] stringForKey:@"Account.JID"];
-	NSString *myPassword = [[NSUserDefaults standardUserDefaults] stringForKey:@"Account.password"];
-    
-	//
-	// If you don't want to use the Settings view to set the JID,
-	// uncomment the section below to hard code a JID and password.
-	//
-	//NSString *myJID = @"joe@localhost";
-	//NSString *myPassword = @"mypassword";
-	
-	if (myJID == nil || myPassword == nil) {
-		return NO;
-	}
-    
-	[xmppStream setMyJID:[XMPPJID jidWithString:myJID]];
 
-	NSError *error = nil;
-	if (![xmppStream connectWithTimeout:XMPPStreamTimeoutNone error:&error])
-	{
-		UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error connecting"
-		                                                    message:@"See console for error details."
-		                                                   delegate:nil
-		                                          cancelButtonTitle:@"Ok"
-		                                          otherButtonTitles:nil];
-		[alertView show];
-        
-        
-		return NO;
-	}
-    
-	return YES;
-}
-
-- (void)disconnect
-{
-	[self goOffline];
-	[xmppStream disconnect];
-}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark UIApplicationDelegate
@@ -368,47 +304,7 @@ static const int ddLogLevel = LOG_LEVEL_INFO;
 	}
 }
 
-- (void)xmppStreamDidSecure:(XMPPStream *)sender
-{
-
-}
-/*
-- (void)xmppStreamDidConnect:(XMPPStream *)sender
-{
-	
-    DDLogInfo(@"Stream Connection succeeded!");
-    
-	isXmppConnected = YES;
-	
-	NSError *error = nil;
-    
-    NSString *myPassword = [[NSUserDefaults standardUserDefaults] stringForKey:@"Account.password"];
-	
-	if (![[self xmppStream] authenticateWithPassword:myPassword error:&error])
-	{
-        //Log the failure here please
-	}
-}
-*/
-
-/*
-- (void)xmppStreamDidAuthenticate:(XMPPStream *)sender
-{
-	
-	[self goOnline];
-}
-*/
-- (void)xmppStream:(XMPPStream *)sender didNotAuthenticate:(NSXMLElement *)error
-{
-
-}
-
-- (BOOL)xmppStream:(XMPPStream *)sender didReceiveIQ:(XMPPIQ *)iq
-{
-
-	return NO;
-}
-
+// Receiver for instant messages
 - (void)xmppStream:(XMPPStream *)sender didReceiveMessage:(XMPPMessage *)message
 {
     
@@ -446,6 +342,8 @@ static const int ddLogLevel = LOG_LEVEL_INFO;
 	}
 }
 
+
+// Will be used as a major handler for location streams.  Now only handles buddy requests
 - (void)xmppStream:(XMPPStream *)sender didReceivePresence:(XMPPPresence *)presence
 {
     NSString *presenceType = [presence type]; // online/offline
@@ -464,89 +362,5 @@ static const int ddLogLevel = LOG_LEVEL_INFO;
     }
 }
 
-- (void)xmppStream:(XMPPStream *)sender didReceiveError:(id)error
-{
-
-}
-
-- (void)xmppStreamDidDisconnect:(XMPPStream *)sender withError:(NSError *)error
-{
-	if (!isXmppConnected) {
-
-	}
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-#pragma mark XMPPRosterDelegate
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-- (void)xmppRoster:(XMPPRoster *)sender didReceiveBuddyRequest:(XMPPPresence *)presence
-{
-
-    DDLogInfo(@"A REQUEST WAS RECEIVED");
-	
-	XMPPUserCoreDataStorageObject *user = [xmppRosterStorage userForJID:[presence from]
-	                                                         xmppStream:xmppStream
-	                                               managedObjectContext:[self managedObjectContext_roster]];
-	
-	NSString *displayName = [user displayName];
-	NSString *jidStrBare = [presence fromStr];
-	NSString *body = nil;
-	
-	if (![displayName isEqualToString:jidStrBare])
-	{
-		body = [NSString stringWithFormat:@"Buddy request from %@ <%@>", displayName, jidStrBare];
-	}
-	else
-	{
-		body = [NSString stringWithFormat:@"Buddy request from %@", displayName];
-	}
-	
-	
-	if ([[UIApplication sharedApplication] applicationState] == UIApplicationStateActive)
-	{
-		UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:displayName
-		                                                    message:body
-		                                                   delegate:nil
-		                                          cancelButtonTitle:@"Not implemented"
-		                                          otherButtonTitles:nil];
-		[alertView show];
-	}
-	else
-	{
-		// We are not active, so use a local notification instead
-		UILocalNotification *localNotification = [[UILocalNotification alloc] init];
-		localNotification.alertAction = @"Not implemented";
-		localNotification.alertBody = body;
-		
-		[[UIApplication sharedApplication] presentLocalNotificationNow:localNotification];
-	}
-	
-}
-
-//-----------------------USER REGISTRATION--------------------------------------
-- (void)xmppStreamDidRegister:(XMPPStream *)sender{
-    
-    
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Registration" message:@"Registration Successful!" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-    [alert show];
-}
-
-
-- (void)xmppStream:(XMPPStream *)sender didNotRegister:(NSXMLElement *)error{
-    
-    DDXMLElement *errorXML = [error elementForName:@"error"];
-    NSString *errorCode  = [[errorXML attributeForName:@"code"] stringValue];
-    
-    NSString *regError = [NSString stringWithFormat:@"ERROR :- %@",error.description];
-    
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Registration Failed!" message:regError delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-    
-    if([errorCode isEqualToString:@"409"]){
-        
-        [alert setMessage:@"Username Already Exists!"];
-    }   
-    [alert show];
-}
 
 @end

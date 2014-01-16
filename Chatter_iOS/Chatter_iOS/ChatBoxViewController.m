@@ -32,24 +32,34 @@
     
 }
 
-- (void)setField:(UITextField *)field forKey:(NSString *)key
-{
-    if (field.text != nil)
-    {
-        [[NSUserDefaults standardUserDefaults] setObject:field.text forKey:key];
-    } else {
-        [[NSUserDefaults standardUserDefaults] removeObjectForKey:key];
-    }
-}
-
 
 - (IBAction)done:(id)sender
 {
     
-    [self sendMessage];
+    [self sendMessage2];
     [self.messageField setText:@""];
     [self.view endEditing:YES];
     
+}
+
+
+-(void)sendMessage2
+{
+    NSString *messageStr = messageField.text;
+    if([messageStr length] > 0)
+    {
+        //NSLog(@"%@",[self messageReceiver]);
+        
+        NSXMLElement *body = [NSXMLElement elementWithName:@"body"];
+        [body setStringValue:messageStr];
+        NSXMLElement *message = [NSXMLElement elementWithName:@"message"];
+        [message addAttributeWithName:@"type" stringValue:@"chat"];
+        [message addAttributeWithName:@"to" stringValue:[self messageReceiver]];
+        [message addChild:body];
+        // NSLog(@"message1%@",message);
+        
+        [[self appDelegate].xmppStream sendElement:message];
+    }
 }
 
 

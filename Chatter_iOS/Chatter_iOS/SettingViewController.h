@@ -12,6 +12,7 @@
 {
     BOOL isRegistering;
     BOOL isAuthenticating;
+    BOOL firstLogin;
     
 }
 
